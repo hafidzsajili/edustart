@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduStart - Kreativitas dari Keterbatasan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .bounce-animation {
+            animation: bounce-gentle 2s ease-in-out infinite;
+        }
+        
+        .pulse-animation {
+            animation: pulse-soft 2s ease-in-out infinite;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #e0f2fe 0%, #fff3e0 50%, #f3e5f5 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="h-full gradient-bg font-sans">
+    <div class="min-h-full flex flex-col">
+        <!-- Header -->
+        <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-10">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <!-- Logo Icon -->
+                    <div class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-blue-600">EduStart</h1>
+                        <p class="text-xs text-gray-600 italic">Kreativitas dari Keterbatasan</p>
+                    </div>
+                </div>
+                
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Beranda</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Tentang</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Kontak</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Hero Section -->
+            <section class="max-w-6xl mx-auto px-4 py-16 text-center">
+                <div class="mb-8">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                        Belajar Jadi Lebih <span class="text-blue-500">Menyenangkan</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                        Platform edukasi interaktif yang membantu anak-anak Indonesia belajar membaca, menulis, dan berhitung dengan cara yang menyenangkan
+                    </p>
+                    
+                    <!-- Main CTA Button -->
+                    <button onclick="startLearning()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-4 px-8 rounded-full text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 pulse-animation">
+                        🚀 Mulai Belajar Sekarang
+                    </button>
+                </div>
+
+                <!-- Illustration -->
+                <div class="mb-16 flex justify-center">
+                    <div class="relative">
+                        <!-- Laptop Illustration -->
+                        <div class="float-animation">
+                            <svg class="w-64 h-48 mx-auto" viewBox="0 0 300 200" fill="none">
+                                <!-- Laptop Base -->
+                                <rect x="20" y="140" width="260" height="40" rx="8" fill="#e5e7eb"/>
+                                <rect x="30" y="150" width="240" height="20" rx="4" fill="#9ca3af"/>
+                                
+                                <!-- Laptop Screen -->
+                                <rect x="60" y="40" width="180" height="120" rx="8" fill="#1f2937"/>
+                                <rect x="70" y="50" width="160" height="100" rx="4" fill="#3b82f6"/>
+                                
+                                <!-- Screen Content -->
+                                <circle cx="100" cy="80" r="8" fill="#fbbf24"/>
+                                <rect x="120" y="75" width="40" height="4" rx="2" fill="#ffffff"/>
+                                <rect x="120" y="85" width="60" height="4" rx="2" fill="#ffffff"/>
+                                <rect x="120" y="95" width="30" height="4" rx="2" fill="#ffffff"/>
+                                
+                                <!-- Child Character -->
+                                <circle cx="200" cy="100" r="15" fill="#fbbf24"/>
+                                <circle cx="195" cy="95" r="2" fill="#1f2937"/>
+                                <circle cx="205" cy="95" r="2" fill="#1f2937"/>
+                                <path d="M195 105 Q200 110 205 105" stroke="#1f2937" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-4 -left-8 bounce-animation">
+                            <div class="bg-yellow-300 rounded-full p-3">
+                                📚
+                            </div>
+                        </div>
+                        <div class="absolute -top-8 -right-4 bounce-animation" style="animation-delay: 0.5s;">
+                            <div class="bg-blue-300 rounded-full p-3">
+                                ✏️
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 left-4 bounce-animation" style="animation-delay: 1s;">
+                            <div class="bg-green-300 rounded-full p-3">
+                                🔢
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Modules -->
+            <section class="max-w-6xl mx-auto px-4 py-16">
+                <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                    Pilih Materi Belajar
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Reading Module -->
+                    <div class="bg-white rounded-2xl p-8 shadow-lg card-hover cursor-pointer" onclick="selectModule('reading')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-3">Belajar Membaca</h4>
+                            <p class="text-gray-600 mb-4">Kenali huruf, suku kata, dan kata-kata sederhana dengan cara yang menyenangkan</p>
+                            <div class="bg-blue-50 rounded-lg p-3">
+                                <span class="text-blue-600 font-semibold">📖 A, B, C...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Writing Module -->
+                    <div class="bg-white rounded-2xl p-8 shadow-lg card-hover cursor-pointer" onclick="selectModule('writing')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-3">Belajar Menulis</h4>
+                            <p class="text-gray-600 mb-4">Latih kemampuan menulis huruf dan kata dengan panduan yang mudah diikuti</p>
+                            <div class="bg-yellow-50 rounded-lg p-3">
+                                <span class="text-yellow-600 font-semibold">✏️ Tulis Yuk!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Math Module -->
+                    <div class="bg-white rounded-2xl p-8 shadow-lg card-hover cursor-pointer" onclick="selectModule('math')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2H11z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-3">Belajar Berhitung</h4>
+                            <p class="text-gray-600 mb-4">Pelajari angka, penjumlahan, dan pengurangan dengan permainan interaktif</p>
+                            <div class="bg-green-50 rounded-lg p-3">
+                                <span class="text-green-600 font-semibold">🔢 1 + 1 = 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="bg-white/50 py-16">
+                <div class="max-w-6xl mx-auto px-4">
+                    <div class="text-center mb-12">
+                        <h3 class="text-3xl font-bold text-gray-800 mb-4">Mengapa Pilih EduStart?</h3>
+                        <p class="text-gray-600">Dibuat dengan cinta oleh mahasiswa Indonesia untuk anak-anak Indonesia</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="text-center p-6">
+                            <div class="text-4xl mb-3">🎯</div>
+                            <h4 class="font-bold text-gray-800 mb-2">Mudah Digunakan</h4>
+                            <p class="text-sm text-gray-600">Interface sederhana yang ramah untuk anak-anak</p>
+                        </div>
+                        
+                        <div class="text-center p-6">
+                            <div class="text-4xl mb-3">🎮</div>
+                            <h4 class="font-bold text-gray-800 mb-2">Interaktif</h4>
+                            <p class="text-sm text-gray-600">Belajar sambil bermain dengan aktivitas menarik</p>
+                        </div>
+                        
+                        <div class="text-center p-6">
+                            <div class="text-4xl mb-3">💡</div>
+                            <h4 class="font-bold text-gray-800 mb-2">Kreatif</h4>
+                            <p class="text-sm text-gray-600">Solusi inovatif dari keterbatasan teknologi</p>
+                        </div>
+                        
+                        <div class="text-center p-6">
+                            <div class="text-4xl mb-3">❤️</div>
+                            <h4 class="font-bold text-gray-800 mb-2">Penuh Cinta</h4>
+                            <p class="text-sm text-gray-600">Dibuat dengan dedikasi untuk pendidikan Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-blue-400 mb-2">EduStart</h3>
+                    <p class="text-gray-300 italic">Kreativitas dari Keterbatasan</p>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-4">
+                    <p class="text-sm text-gray-400">
+                        Dibuat dengan 💙 oleh <span class="font-semibold text-yellow-400">Afriza</span> – Mahasiswa Kreatif Indonesia
+                    </p>
+                    <p class="text-xs text-gray-500 mt-2">
+                        © 2024 EduStart. Membangun masa depan pendidikan Indonesia.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4">🎉</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Selamat!</h3>
+            <p class="text-gray-600 mb-6" id="modalMessage">Anda telah memilih modul belajar!</p>
+            <button onclick="whatsapp.com" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full transition-colors">
+                Mulai Belajar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function startLearning() {
+            showModal("Siap untuk memulai petualangan belajar yang menyenangkan! 🚀");
+        }
+        
+        function selectModule(module) {
+            const messages = {
+                'reading': 'Modul Belajar Membaca dipilih! Mari kenali huruf-huruf dengan cara yang menyenangkan! 📚',
+                'writing': 'Modul Belajar Menulis dipilih! Saatnya berlatih menulis huruf dan kata-kata! ✏️',
+                'math': 'Modul Belajar Berhitung dipilih! Ayo bermain dengan angka-angka! 🔢'
+            };
+            
+            showModal(messages[module]);
+        }
+        
+        function showModal(message) {
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98effc36950981bf',t:'MTc2MDUzODMyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
