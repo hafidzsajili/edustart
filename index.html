@@ -366,7 +366,15 @@
             document.getElementById('loadingOverlay').classList.add('hidden');
             showMessage("🔢 Halaman Belajar Berhitung akan segera tersedia! Fitur ini sedang dalam pengembangan.");
         }
-
+         function goToReading() {
+            window.location.href = "https://hafidzsajili.github.io/edustart/membaca.html";
+        }
+        function goToWriting() {
+            window.location.href = "https://hafidzsajili.github.io/edustart/menulis.html";
+        }
+        function goToCounting() {
+            window.location.href = "https://hafidzsajili.github.io/edustart/berhitung.html";
+        }
         function showMessage(message) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-4 rounded-2xl shadow-lg z-50 transition-all duration-300 max-w-md text-center';
