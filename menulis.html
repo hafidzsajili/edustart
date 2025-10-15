@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Menulis - EduStart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .notebook-lines {
+            background-image: 
+                linear-gradient(to bottom, transparent 0px, transparent 39px, #7EC8E3 39px, #7EC8E3 41px, transparent 41px, transparent 80px),
+                linear-gradient(to bottom, transparent 0px, transparent 79px, #7EC8E3 79px, #7EC8E3 81px, transparent 81px, transparent 120px);
+            background-size: 100% 80px;
+            background-repeat: repeat-y;
+        }
+        
+        .canvas-container {
+            position: relative;
+            background: white;
+            border: 3px solid #7EC8E3;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        #drawingCanvas {
+            cursor: crosshair;
+            border-radius: 12px;
+        }
+        
+        .letter-guide {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #7EC8E3;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .direction-arrow {
+            position: absolute;
+            color: #FFD93D;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .bounce-animation {
+            animation: bounce 2s infinite;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD93D 0%, #FFC107 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 217, 61, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #7EC8E3 0%, #4FC3F7 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(126, 200, 227, 0.4);
+        }
+        
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(#FFD93D 0deg, #FFD93D var(--progress, 0deg), #e5e7eb var(--progress, 0deg));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .progress-circle::before {
+            content: '';
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+        }
+        
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            color: #7EC8E3;
+        }
+    </style>
+</head>
+<body class="h-full bg-white notebook-lines font-sans">
+    <div class="min-h-full">
+        <!-- Header -->
+        <header class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-10 border-b-2 border-yellow-200">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+                <button onclick="goHome()" class="flex items-center space-x-2 btn-secondary text-white px-4 py-2 rounded-full font-bold">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>Kembali</span>
+                </button>
+                
+                <div class="text-center">
+                    <h1 class="text-2xl md:text-3xl font-bold text-blue-600">✏️ Belajar Menulis</h1>
+                    <p class="text-sm text-gray-600">Latih kemampuan menulis huruf dan angka!</p>
+                </div>
+                
+                <div class="progress-circle" style="--progress: 0deg" id="progressCircle">
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-8">
+            <!-- Instructions -->
+            <div class="bg-yellow-100 rounded-2xl p-6 mb-8 text-center shadow-lg border-2 border-yellow-300">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">🎯 Cara Berlatih</h2>
+                <p class="text-gray-700">Lihat contoh huruf, ikuti arah panah, lalu coba tulis di kanvas dengan mouse atau jari!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Letter Example Section -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200 mb-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">📝 Contoh Huruf</h3>
+                        
+                        <!-- Current Letter Display -->
+                        <div class="relative bg-blue-50 rounded-xl p-8 mb-4">
+                            <div class="text-center">
+                                <div id="currentLetter" class="text-8xl font-bold text-blue-600 mb-2" style="font-family: 'Comic Sans MS', cursive;">A</div>
+                                <p id="currentLetterName" class="text-lg font-semibold text-gray-700">Huruf A</p>
+                            </div>
+                            
+                            <!-- Direction Arrows -->
+                            <div id="directionArrows" class="absolute inset-0 pointer-events-none">
+                                <!-- Arrows will be positioned dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Letter/Number Selector -->
+                        <div class="flex justify-center space-x-2 mb-4">
+                            <button onclick="switchMode('letters')" id="lettersBtn" class="btn-primary text-gray-800 px-4 py-2 rounded-full font-bold text-sm">
+                                ABC
+                            </button>
+                            <button onclick="switchMode('numbers')" id="numbersBtn" class="btn-secondary text-white px-4 py-2 rounded-full font-bold text-sm">
+                                123
+                            </button>
+                        </div>
+                        
+                        <!-- Navigation -->
+                        <div class="flex justify-between">
+                            <button onclick="previousItem()" class="btn-secondary text-white px-4 py-2 rounded-full font-bold">
+                                ← Sebelumnya
+                            </button>
+                            <button onclick="nextItem()" class="btn-primary text-gray-800 px-4 py-2 rounded-full font-bold">
+                                Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tips Section -->
+                    <div class="bg-yellow-50 rounded-2xl p-4 shadow-lg border-2 border-yellow-200">
+                        <h4 class="font-bold text-gray-800 mb-2">💡 Tips Menulis</h4>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• Ikuti arah panah kuning</li>
+                            <li>• Tulis perlahan dan hati-hati</li>
+                            <li>• Ulangi sampai rapi</li>
+                            <li>• Jangan lupa berlatih setiap hari!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Drawing Canvas Section -->
+                <div class="lg:col-span-2">
+                    <div class="canvas-container mb-6">
+                        <div class="bg-white rounded-xl p-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">🖊️ Area Latihan Menulis</h3>
+                            
+                            <!-- Canvas with guide -->
+                            <div class="relative">
+                                <canvas id="drawingCanvas" width="600" height="400" class="w-full border-2 border-dashed border-blue-200 bg-white"></canvas>
+                                
+                                <!-- Guide Letter (faded background) -->
+                                <div id="guideLetter" class="letter-guide absolute inset-0 flex items-center justify-center text-9xl font-bold pointer-events-none">
+                                    A
+                                </div>
+                            </div>
+                            
+                            <!-- Canvas Controls -->
+                            <div class="flex justify-center space-x-4 mt-4">
+                                <button onclick="clearCanvas()" class="bg-red-400 hover:bg-red-500 text-white px-6 py-2 rounded-full font-bold transition-all">
+                                    🗑️ Hapus
+                                </button>
+                                <button onclick="toggleGuide()" id="guideBtn" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-full font-bold transition-all">
+                                    👁️ Panduan
+                                </button>
+                                <button onclick="saveDrawing()" class="bg-green-400 hover:bg-green-500 text-white px-6 py-2 rounded-full font-bold transition-all">
+                                    💾 Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white rounded-xl p-4 text-center shadow-lg border-2 border-blue-200">
+                            <div class="text-2xl font-bold text-blue-600" id="practiceCount">0</div>
+                            <p class="text-sm text-gray-600">Huruf Dipraktikkan</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 text-center shadow-lg border-2 border-yellow-200">
+                            <div class="text-2xl font-bold text-yellow-600" id="strokeCount">0</div>
+                            <p class="text-sm text-gray-600">Goresan Hari Ini</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 text-center shadow-lg border-2 border-green-200">
+                            <div class="text-2xl font-bold text-green-600" id="completedCount">0</div>
+                            <p class="text-sm text-gray-600">Selesai</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-4 text-center shadow-lg border-2 border-purple-200">
+                            <div class="text-2xl font-bold text-purple-600" id="timeSpent">0m</div>
+                            <p class="text-sm text-gray-600">Waktu Belajar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4 bounce-animation">🎉</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Hebat Sekali!</h3>
+            <p class="text-gray-600 mb-6" id="successMessage">Kamu berhasil berlatih menulis!</p>
+            <button onclick="closeSuccessModal()" class="btn-primary text-gray-800 font-bold py-3 px-6 rounded-full">
+                Lanjut Berlatih
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentMode = 'letters'; // 'letters' or 'numbers'
+        let currentIndex = 0;
+        let isDrawing = false;
+        let showGuide = true;
+        let practiceStats = {
+            practiced: new Set(),
+            strokes: 0,
+            completed: new Set(),
+            startTime: Date.now()
+        };
+        
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const numbers = '0123456789'.split('');
+        
+        const letterNames = {
+            'A': 'Huruf A', 'B': 'Huruf B', 'C': 'Huruf C', 'D': 'Huruf D', 'E': 'Huruf E',
+            'F': 'Huruf F', 'G': 'Huruf G', 'H': 'Huruf H', 'I': 'Huruf I', 'J': 'Huruf J',
+            'K': 'Huruf K', 'L': 'Huruf L', 'M': 'Huruf M', 'N': 'Huruf N', 'O': 'Huruf O',
+            'P': 'Huruf P', 'Q': 'Huruf Q', 'R': 'Huruf R', 'S': 'Huruf S', 'T': 'Huruf T',
+            'U': 'Huruf U', 'V': 'Huruf V', 'W': 'Huruf W', 'X': 'Huruf X', 'Y': 'Huruf Y',
+            'Z': 'Huruf Z', '0': 'Angka Nol', '1': 'Angka Satu', '2': 'Angka Dua', '3': 'Angka Tiga',
+            '4': 'Angka Empat', '5': 'Angka Lima', '6': 'Angka Enam', '7': 'Angka Tujuh',
+            '8': 'Angka Delapan', '9': 'Angka Sembilan'
+        };
+        
+        // Canvas setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.min(600, rect.width - 20);
+            canvas.height = 400;
+            
+            // Set drawing styles
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        
+        // Initialize
+        function init() {
+            resizeCanvas();
+            updateDisplay();
+            setupCanvasEvents();
+            updateStats();
+            
+            // Welcome message
+            setTimeout(() => {
+                showMessage("Selamat datang! Mari berlatih menulis huruf dan angka! ✏️");
+            }, 1000);
+        }
+        
+        // Canvas drawing events
+        function setupCanvasEvents() {
+            // Mouse events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            
+            practiceStats.strokes++;
+            updateStats();
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+        
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.beginPath();
+                
+                // Mark as practiced
+                const currentItem = getCurrentItem();
+                practiceStats.practiced.add(currentItem);
+                updateStats();
+            }
+        }
+        
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                            e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        
+        // Navigation functions
+        function switchMode(mode) {
+            currentMode = mode;
+            currentIndex = 0;
+            updateDisplay();
+            updateModeButtons();
+        }
+        
+        function updateModeButtons() {
+            const lettersBtn = document.getElementById('lettersBtn');
+            const numbersBtn = document.getElementById('numbersBtn');
+            
+            if (currentMode === 'letters') {
+                lettersBtn.className = 'btn-primary text-gray-800 px-4 py-2 rounded-full font-bold text-sm';
+                numbersBtn.className = 'btn-secondary text-white px-4 py-2 rounded-full font-bold text-sm opacity-70';
+            } else {
+                lettersBtn.className = 'btn-secondary text-white px-4 py-2 rounded-full font-bold text-sm opacity-70';
+                numbersBtn.className = 'btn-primary text-gray-800 px-4 py-2 rounded-full font-bold text-sm';
+            }
+        }
+        
+        function previousItem() {
+            const items = currentMode === 'letters' ? letters : numbers;
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateDisplay();
+            showMessage(`Sekarang berlatih: ${getCurrentItem()}`);
+        }
+        
+        function nextItem() {
+            const items = currentMode === 'letters' ? letters : numbers;
+            currentIndex = (currentIndex + 1) % items.length;
+            updateDisplay();
+            showMessage(`Sekarang berlatih: ${getCurrentItem()}`);
+        }
+        
+        function getCurrentItem() {
+            const items = currentMode === 'letters' ? letters : numbers;
+            return items[currentIndex];
+        }
+        
+        function updateDisplay() {
+            const currentItem = getCurrentItem();
+            document.getElementById('currentLetter').textContent = currentItem;
+            document.getElementById('currentLetterName').textContent = letterNames[currentItem];
+            document.getElementById('guideLetter').textContent = currentItem;
+            
+            // Update direction arrows (simplified)
+            updateDirectionArrows(currentItem);
+        }
+        
+        function updateDirectionArrows(item) {
+            const arrowsContainer = document.getElementById('directionArrows');
+            arrowsContainer.innerHTML = '';
+            
+            // Add some example arrows for demonstration
+            if (item === 'A') {
+                arrowsContainer.innerHTML = `
+                    <div class="direction-arrow" style="top: 20%; left: 45%;">↗️</div>
+                    <div class="direction-arrow" style="top: 50%; left: 30%;">↘️</div>
+                    <div class="direction-arrow" style="top: 60%; left: 60%;">←</div>
+                `;
+            } else if (item === 'O') {
+                arrowsContainer.innerHTML = `
+                    <div class="direction-arrow" style="top: 30%; left: 50%;">↻</div>
+                `;
+            } else if (item === '1') {
+                arrowsContainer.innerHTML = `
+                    <div class="direction-arrow" style="top: 20%; left: 45%;">↓</div>
+                `;
+            }
+        }
+        
+        // Canvas controls
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            showMessage("Kanvas dibersihkan! Siap untuk berlatih lagi! 🧹");
+        }
+        
+        function toggleGuide() {
+            showGuide = !showGuide;
+            const guideLetter = document.getElementById('guideLetter');
+            const guideBtn = document.getElementById('guideBtn');
+            
+            if (showGuide) {
+                guideLetter.style.opacity = '0.3';
+                guideBtn.textContent = '👁️ Panduan';
+                guideBtn.className = 'bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-full font-bold transition-all';
+            } else {
+                guideLetter.style.opacity = '0';
+                guideBtn.textContent = '👁️ Sembunyikan';
+                guideBtn.className = 'bg-blue-400 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-bold transition-all';
+            }
+        }
+        
+        function saveDrawing() {
+            const currentItem = getCurrentItem();
+            practiceStats.completed.add(currentItem);
+            updateStats();
+            
+            document.getElementById('successMessage').textContent = 
+                `Hebat! Kamu berhasil berlatih menulis ${letterNames[currentItem]}! 🎉`;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            clearCanvas();
+            nextItem();
+        }
+        
+        // Stats and progress
+        function updateStats() {
+            document.getElementById('practiceCount').textContent = practiceStats.practiced.size;
+            document.getElementById('strokeCount').textContent = practiceStats.strokes;
+            document.getElementById('completedCount').textContent = practiceStats.completed.size;
+            
+            const timeSpent = Math.floor((Date.now() - practiceStats.startTime) / 60000);
+            document.getElementById('timeSpent').textContent = timeSpent + 'm';
+            
+            // Update progress circle
+            const totalItems = letters.length + numbers.length;
+            const progress = (practiceStats.completed.size / totalItems) * 100;
+            const progressDeg = (progress / 100) * 360;
+            
+            document.getElementById('progressCircle').style.setProperty('--progress', progressDeg + 'deg');
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+        
+        // Utility functions
+        function goHome() {
+            showMessage("Kembali ke menu utama! Kerja bagus hari ini! 👏");
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+        
+        function showMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg z-50 transition-all duration-300';
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                messageDiv.style.transform = 'translate(-50%, -20px)';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 3000);
+        }
+        
+        // Event listeners
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSuccessModal();
+        });
+        
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f0233793709af4',t:'MTc2MDUzOTkxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
